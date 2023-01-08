@@ -1,0 +1,138 @@
+Signal  		Non Ethernet format  	Ethernet format  
+Initial update  STX 54 CR LF  			SOH K STX 54 CR LF  the acknowledgement signal from the receiving side is: SOH K STX 93 CR LF  
+
+where K = tag number (000 - 255) and 93 is the acknowledgement code.
+
+The signal sending side time-supervises the handshake procedure. If the expected acknowledgement signal is not received within 10 seconds, the signal sent is considered lost and is sent again with the same tag number. At the receiving side, if the new signal that it receives carries the same tag number as the last received signal, it assumes the last acknowledgement signal has been lost. It will acknowledge the current signal, but will not repeat any action taken for the previous signal.
+
+The tag number K is reset to 000 whenever there is a restart condition at the signal sending side. Tag number 000 is reserved for restart condition so that the receiving side will accept the signal with tag number 000 as a new signal.
+
+2.1.5.2   The following signals are sent if the standard function is used:
+STX 80 T V CR LF
+Diverted call
+
+Voice channel V has been seized for an incoming diverted call to an extension with directory number T.
+
+STX 81 D V CR LF
+Direct internal call
+Voice channel V has been seized for an incoming, direct, internal call from an extension or PABX operator with directory number D. In the standard function the voice mail system detects the call origin (internal or external) by the type of ring cadence.
+
+2.1.5.3   The following signals are sent if the extended or extended level 2 function is used:
+STX 82 D V CR LF
+Direct internal call from extension or PABX operator
+
+Voice channel V has been seized for: an incoming direct internal call from an extension possessing directory number D, a direct call from PABX operator with directory number D and no connected party, or a direct call from PABX operator with directory number D and a connected party that was not diverted or rerouted to the PABX operator.
+
+STX 83 D T V CR LF
+Diverted internal call
+
+Voice channel V has been seized for an incoming diverted internal call to an extension with directory number T from an extension or PABX operator with directory number D.
+
+STX 84 V CR LF
+Direct external call
+
+Voice channel V has been seized for an incoming direct external call.
+
+STX 85 T V CR LF
+Diverted external call
+
+Voice channel V has been seized for an incoming diverted external call to an extension with directory number T.
+
+STX 86 T V CR LF
+Direct call from PABX operator with connected party.
+
+Voice channel V has been seized for an incoming direct call from a PABX operator with connected party. The party connected to the PABX operator has been diverted or rerouted to the PABX operator in conjunction with a call to an extension with directory number T.
+
+STX 89 V CR LF
+Order to clear down the voice channel.
+
+The party who has had speech connection with the voice mail system on voice channel V has cleared down.
+
+2.1.5.4   If the extended level 2 function is used, the following signals are sent in addition to the signals sent for the extended function:
+STX 91 D T V CR LF
+Diverted internal call no answer
+
+Voice channel V has been seized for an incoming diverted internal call to an extension with directory number T from an extension or PABX operator with directory number D. The called extension is diverted at no answer.
+
+STX 92 D T V CR LF
+Diverted internal call busy
+
+Voice channel V has been seized for an incoming diverted internal call to an extension with directory number T from an extension or PABX operator with directory number D. The called extension is diverted at busy.
+
+STX 93 CR LF
+Acknowledgement message (for all types of voice mail systems with Ethernet connection)
+
+The PABX informs the voice mail system that it has received the current message and it is ready to receive the next message.
+
+STX 94 T V CR LF
+Diverted external call no answer
+
+Voice channel V has been seized for an incoming diverted external call to an extension with directory number T. The called extension is diverted at no answer.
+
+STX 95 T V CR LF
+Diverted external call busy
+
+Voice channel V has been seized for an incoming diverted external call to an extension with directory number T. The called extension is diverted at busy.
+
+STX 98 CR LF
+Heartbeat check
+
+The heartbeat check is sent periodically to the voice mail system.
+
+STX 99 CR LF
+Heartbeat response
+
+The heartbeat response is sent in response to heartbeat check signal from the voice mail system.
+
+2.1.5.5   If the extended level 3 function is used, the following signals are sent in addition to the signals sent for the extended level 2 function:
+STX 87 PUB V CR LF
+Direct external call with calling number:
+
+Voice channel V has been seized for an incoming direct external call from a user with number PUB.
+
+STX 88 PUB T V CR LF
+Diverted external call with calling number:
+
+Voice channel V has been seized for an incoming diverted external call to an extension with directory number T, from a user with number PUB.
+
+STX 96 PUB T V CR LF
+Diverted on no answer external call with calling number:
+
+Voice channel V has been seized for an incoming diverted external call to an extension with directory number T from a user with number PUB. The called extension is diverted on no answer.
+
+STX 97 PUB T V CR LF
+Diverted on busy external call with calling number:
+
+Voice channel V has been seized for an incoming diverted external call to an extension with directory number T, from a user with number PUB. The called extension is diverted on busy.
+
+2.1.5.6   The PABX can receive the following signals from the voice mail system when standard, extended, extended level 2, or extended level 3 function is used:
+STX 02 CR LF
+This is an acknowledgement message - sent in reply to STX 54 CR LF - which means that the voice mail system is ready to update the message waiting information of the PABX by sending a number of STX 06 for the extensions concerned. STX 02 can also be received spontaneously if the voice mail system requests updating.
+
+STX 03 CR LF
+Updating completed (see STX 02).
+
+STX 04 CR LF
+Request from an external information system to start a PABX ordered update of message diversion/message waiting missions. This request enables the PABX to remove all message diversion/message waiting missions before updating the PABX from the external information system.
+
+STX 06 T SS CR LF
+Indicate that extension T has a message waiting for him/her in message system SS.
+
+STX 07 T SS CR LF
+Erase the message waiting indication for extension T and message system SS.
+
+STX 93 CR LF
+Acknowledgement message (for Ethernet connection only)
+
+The voice mail system informs the PABX that it has received the current message and it is ready to receive the next message.
+
+2.1.5.7   The PABX can receive the following additional signals from the voice mail system when extended level 2 or 3 function is used:
+STX 98 CR LF
+Heartbeat check
+
+The heartbeat check is sent periodically from the voice mail system.
+
+STX 99 CR LF
+Heartbeat response
+
+The heartbeat response is sent from the PABX in response to heartbeat check signal.
